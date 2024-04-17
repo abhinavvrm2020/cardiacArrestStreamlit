@@ -37,7 +37,7 @@ def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth
     features = [BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth_encoding, SleepTime, Asthma, KidneyDisease, SkinCancer]
     
     # Reshape features into 2D array for prediction
-    features_arr = np.array(features, dtype=object).reshape(1, -1)
+    features_arr = np.array(features, dtype=float).reshape(1, -1)
 
     # Make prediction
     prediction = classifier.predict(features_arr)
