@@ -19,21 +19,7 @@ def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth
     Asthma = 1 if Asthma == "Yes" else 0
     KidneyDisease = 1 if KidneyDisease == "Yes" else 0
     SkinCancer = 1 if SkinCancer == "Yes" else 0
-    
-    # Print encoded values
-    print("Smoking:", Smoking)
-    print("Alcohol Drinking:", AlcoholDrinking)
-    print("Stroke:", Stroke)
-    print("Difficulty Walking:", DiffWalking)
-    print("Sex:", Sex)
-    print("Diabetic:", Diabetic)
-    print("Physical Activity:", PhysicalActivity)
-    print("General Health encoding:", GenHealth_encoding)
-    print("Asthma:", Asthma)
-    print("Kidney Disease:", KidneyDisease)
-    print("Skin Cancer:", SkinCancer)
-    print("BMI:", BMI)
-    
+
     # Prepare features for prediction
     features = [BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth_encoding, SleepTime, Asthma, KidneyDisease, SkinCancer]
     
@@ -52,22 +38,22 @@ def main():
     <h2 style="color:white;text-align:center;">Cardiac Arrest Prediction ML App </h2>
     </div>
     """
-    st.markdown(html_temp,unsafe_allow_html=True)
+    st.markdown(html_temp, unsafe_allow_html=True)
     
     # Input fields for user input
-    BMI = st.text_input("BMI", "Type Here")
+    BMI = st.text_input("BMI", "Type Here", on_focusout=True)
     Smoking = st.radio("Smoking", ("Yes", "No"))
     AlcoholDrinking = st.radio("Alcohol Drinking", ("Yes", "No"))
     Stroke = st.radio("Stroke", ("Yes", "No"))
-    PhysicalHealth = st.text_input("Physical Health", "Type Here")
-    MentalHealth = st.text_input("Mental Health", "Type Here")
+    PhysicalHealth = st.text_input("Physical Health", "Type Here", on_focusout=True)
+    MentalHealth = st.text_input("Mental Health", "Type Here", on_focusout=True)
     DiffWalking = st.radio("Difficulty Walking", ("Yes", "No"))
     Sex = st.radio("Sex", ("Male", "Female"))
-    Age = st.text_input("Age", "Type Here")
+    Age = st.text_input("Age", "Type Here", on_focusout=True)
     Diabetic = st.radio("Diabetic", ("Yes", "No"))
     PhysicalActivity = st.radio("Physical Activity", ("Yes", "No"))
     GenHealth = st.radio("General Health", ("Excellent", "Very good", "Good", "Fair", "Poor"))
-    SleepTime = st.text_input("Sleep Time", "Type Here")
+    SleepTime = st.text_input("Sleep Time", "Type Here", on_focusout=True)
     Asthma = st.radio("Asthma", ("Yes", "No"))
     KidneyDisease = st.radio("Kidney Disease", ("Yes", "No"))
     SkinCancer = st.radio("Skin Cancer", ("Yes", "No"))
