@@ -6,6 +6,7 @@ from tensorflow.keras.models import load_model
 # Load the classifier model
 classifier = load_model("trained_model.h5")
 
+
 def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth, SleepTime, Asthma, KidneyDisease, SkinCancer):
     # Encode categorical variables as needed
     Smoking = 1 if Smoking == "Yes" else 0
