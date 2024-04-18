@@ -1,11 +1,14 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-from tensorflow.keras.models import load_model
+import tensorflow as tf
+from tensorflow import keras
+import joblib
 
-# Load the classifier model
-classifier = load_model("trained_model.h5")
-
+# Load the XGBoost model
+classifier1 = joblib.load('xgb_regressor.pkl')
+# classifier2 = joblib.load('random_forest_regressor.pkl')
+classifier3 = keras.models.load_model("trained_model.h5")
 
 def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth, SleepTime, Asthma, KidneyDisease, SkinCancer):
     # Encode categorical variables as needed
@@ -20,30 +23,20 @@ def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth
     Asthma = 1 if Asthma == "Yes" else 0
     KidneyDisease = 1 if KidneyDisease == "Yes" else 0
     SkinCancer = 1 if SkinCancer == "Yes" else 0
-    
-    # Print encoded values
-    print("Smoking:", Smoking)
-    print("Alcohol Drinking:", AlcoholDrinking)
-    print("Stroke:", Stroke)
-    print("Difficulty Walking:", DiffWalking)
-    print("Sex:", Sex)
-    print("Diabetic:", Diabetic)
-    print("Physical Activity:", PhysicalActivity)
-    print("General Health encoding:", GenHealth_encoding)
-    print("Asthma:", Asthma)
-    print("Kidney Disease:", KidneyDisease)
-    print("Skin Cancer:", SkinCancer)
-    
+
     # Prepare features for prediction
     features = [BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth_encoding, SleepTime, Asthma, KidneyDisease, SkinCancer]
     
     # Reshape features into 2D array for prediction
-    features_arr = np.array(features, dtype=float).reshape(1, -1)
+    features_arr_float = np.array(features, dtype=float).reshape(1, -1)
 
     # Make prediction
-    prediction = classifier.predict(features_arr)
-    
-    return prediction[0]  # Assuming the prediction is a single value
+    prediction1 = classifier1.predict(features_arr_float)
+    # prediction2 = classifier2.predict(features_arr_object)
+    prediction3 = classifier3.predict(features_arr_float)
+    print(prediction1)
+    print(prediction3)
+    return np.maximum(prediction1, prediction3)
 
 def main():
     st.title("Cardiac Arrest Prediction")
