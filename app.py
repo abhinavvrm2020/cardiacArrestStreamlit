@@ -54,7 +54,7 @@ def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth
     # Make prediction
     prediction1 = classifier1.predict(features_arr_float)
     # prediction2 = classifier2.predict(features_arr_object)
-    prediction3 = classifier3.predict(features_arr_float)
+    prediction3 = classifier3.predict(features_arr_float)[0]
     print(prediction1)
     print(prediction3)
     return np.maximum(prediction1, prediction3)
