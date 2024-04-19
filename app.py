@@ -1,7 +1,7 @@
 import numpy as np
-import pandas as pd
 import streamlit as st
-import tensorflow as tf
+from tensorflow.keras.models import load_model
+import matplotlib.pyplot as plt
 from tensorflow import keras
 import joblib
 
@@ -10,6 +10,27 @@ classifier1 = joblib.load('xgb_regressor.pkl')
 # classifier2 = joblib.load('random_forest_regressor.pkl')
 classifier3 = keras.models.load_model("trained_model.h5")
 
+def draw_donut_chart(data, title):
+    sizes = [data,100-data] 
+
+    # Create a pie chart
+    fig, ax = plt.subplots()
+    ax.pie(sizes, labels=['Unsafe','Safe'], colors=['red','green'], autopct='%1.1f%%', startangle=90, wedgeprops=dict(width=0.3))
+
+    # Draw a circle in the middle to make it a donut chart
+    centre_circle = plt.Circle((0, 0), 0.7, color='white', fc='white', linewidth=1.25)
+    fig.gca().add_artist(centre_circle)
+
+    # Equal aspect ratio ensures that pie is drawn as a circle
+    ax.axis('equal')
+    
+    # Set title
+    ax.set_title(title, size=16)
+
+    # Set background color
+    ax.set_facecolor('lightgrey')
+
+    st.pyplot(fig)
 def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth, SleepTime, Asthma, KidneyDisease, SkinCancer):
     # Encode categorical variables as needed
     Smoking = 1 if Smoking == "Yes" else 0
@@ -33,7 +54,7 @@ def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth
     # Make prediction
     prediction1 = classifier1.predict(features_arr_float)
     # prediction2 = classifier2.predict(features_arr_object)
-    prediction3 = classifier3.predict(features_arr_float)
+    prediction3 = classifier3.predict(features_arr_float)[0]
     print(prediction1)
     print(prediction3)
     return np.maximum(prediction1, prediction3)
@@ -48,30 +69,42 @@ def main():
     st.markdown(html_temp,unsafe_allow_html=True)
     
     # Input fields for user input
-    BMI = st.text_input("BMI", "Type Here")
+    BMI = st.slider('BMI:', min_value=0.0, max_value=100.0, value=0.0,step=0.0001)
+    # BMI = st.text_input("BMI", "Type Here")
     Smoking = st.radio("Smoking", ("Yes", "No"))
     AlcoholDrinking = st.radio("Alcohol Drinking", ("Yes", "No"))
     Stroke = st.radio("Stroke", ("Yes", "No"))
-    PhysicalHealth = st.text_input("Physical Health", "Type Here")
-    MentalHealth = st.text_input("Mental Health", "Type Here")
+    # PhysicalHealth = st.text_input("Physical Health", "Type Here")
+    PhysicalHealth = st.slider('Physical Health:', min_value=0, max_value=100, value=0)
+
+    # MentalHealth = st.text_input("Mental Health", "Type Here")
+    MentalHealth = st.slider('Mental Health:', min_value=0, max_value=100, value=0)
+
     DiffWalking = st.radio("Difficulty Walking", ("Yes", "No"))
     Sex = st.radio("Sex", ("Male", "Female"))
-    Age = st.text_input("Age", "Type Here")
+    # Age = st.text_input("Age", "Type Here")
+    Age = st.slider('Age:', min_value=1, max_value=200, value=0)
+
     Diabetic = st.radio("Diabetic", ("Yes", "No"))
     PhysicalActivity = st.radio("Physical Activity", ("Yes", "No"))
     GenHealth = st.radio("General Health", ("Excellent", "Very good", "Good", "Fair", "Poor"))
-    SleepTime = st.text_input("Sleep Time", "Type Here")
+    # SleepTime = st.text_input("Sleep Time", "Type Here")
+    SleepTime = st.slider('Sleep Time:', min_value=0.0, max_value=24.0, value=0.0,step=0.5)
+
     Asthma = st.radio("Asthma", ("Yes", "No"))
     KidneyDisease = st.radio("Kidney Disease", ("Yes", "No"))
     SkinCancer = st.radio("Skin Cancer", ("Yes", "No"))
     
-    result = ""
+    result = []
     if st.button("Predict"):
+        check=True
         result = predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth, SleepTime, Asthma, KidneyDisease, SkinCancer)
-    st.success('The predicted class is {}'.format(result))
-    if st.button("About"):
-        st.text("Cardiac Arrest Prediction App")
-        st.text("Built with Streamlit")
+    # st.success('The predicted class is {}'.format(result))
+    # if st.button("About"):
+    #     st.text("Cardiac Arrest Prediction App")
+    if len(result) and check > 0:
+        result = [value * 100 for value in result]
+        draw_donut_chart(result[0], "Cardiac Arrest Prediction Percentage")
 
 if __name__=='__main__':
     main()
