@@ -11,7 +11,9 @@ classifier1 = joblib.load('xgb_regressor.pkl')
 classifier3 = keras.models.load_model("trained_model.h5")
 
 def draw_donut_chart(data, title):
-    sizes = [data,100-data] 
+    if(data<0):
+        data =0
+    sizes = [data,100-data]
 
     # Create a pie chart
     fig, ax = plt.subplots()
@@ -31,6 +33,7 @@ def draw_donut_chart(data, title):
     ax.set_facecolor('lightgrey')
 
     st.pyplot(fig)
+
 def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth, MentalHealth, DiffWalking, Sex, Age, Diabetic, PhysicalActivity, GenHealth, SleepTime, Asthma, KidneyDisease, SkinCancer):
     # Encode categorical variables as needed
     Smoking = 1 if Smoking == "Yes" else 0
@@ -57,7 +60,7 @@ def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth
     prediction3 = classifier3.predict(features_arr_float)[0]
     print(prediction1)
     print(prediction3)
-    return np.maximum(prediction1, prediction3)
+    return (prediction1  + prediction3)/2
 
 def main():
     st.title("Cardiac Arrest Prediction")
@@ -69,8 +72,16 @@ def main():
     st.markdown(html_temp,unsafe_allow_html=True)
     
     # Input fields for user input
-    BMI = st.slider('BMI:', min_value=0.0, max_value=100.0, value=0.0,step=0.0001)
-    # BMI = st.text_input("BMI", "Type Here")
+    BMI = st.slider('BMI:', min_value=0.0, max_value=100.0, value=28.32,step=0.0001)
+    # weight = st.text_input("Weight (Kg)", value = 50)
+    # height = st.text_input("Height (cm)", value = 165)
+
+    # Convert inputs to float
+    # weight = float(weight)
+    # height = float(height) / 100  # converting cm to meters
+
+    # Calculate BMI
+    # BMI = weight / (height * height)
     Smoking = st.radio("Smoking", ("Yes", "No"))
     AlcoholDrinking = st.radio("Alcohol Drinking", ("Yes", "No"))
     Stroke = st.radio("Stroke", ("Yes", "No"))
@@ -83,13 +94,13 @@ def main():
     DiffWalking = st.radio("Difficulty Walking", ("Yes", "No"))
     Sex = st.radio("Sex", ("Male", "Female"))
     # Age = st.text_input("Age", "Type Here")
-    Age = st.slider('Age:', min_value=1, max_value=200, value=0)
+    Age = st.slider('Age:', min_value=1, max_value=80, value=54)
 
     Diabetic = st.radio("Diabetic", ("Yes", "No"))
     PhysicalActivity = st.radio("Physical Activity", ("Yes", "No"))
     GenHealth = st.radio("General Health", ("Excellent", "Very good", "Good", "Fair", "Poor"))
     # SleepTime = st.text_input("Sleep Time", "Type Here")
-    SleepTime = st.slider('Sleep Time:', min_value=0.0, max_value=24.0, value=0.0,step=0.5)
+    SleepTime = st.slider('Sleep Time:', min_value=0.0, max_value=24.0, value=7.0,step=0.5)
 
     Asthma = st.radio("Asthma", ("Yes", "No"))
     KidneyDisease = st.radio("Kidney Disease", ("Yes", "No"))
