@@ -72,7 +72,7 @@ def main():
     st.markdown(html_temp,unsafe_allow_html=True)
     
     # Input fields for user input
-    BMI = st.slider('BMI:', min_value=0.0, max_value=100.0, value=28.32,step=0.0001)
+    BMI = st.slider('BMI:', min_value=0.0, max_value=50.0, value=28.32,step=0.0001)
     # weight = st.text_input("Weight (Kg)", value = 50)
     # height = st.text_input("Height (cm)", value = 165)
 
@@ -86,15 +86,15 @@ def main():
     AlcoholDrinking = st.radio("Alcohol Drinking", ("Yes", "No"))
     Stroke = st.radio("Stroke", ("Yes", "No"))
     # PhysicalHealth = st.text_input("Physical Health", "Type Here")
-    PhysicalHealth = st.slider('Physical Health:', min_value=0, max_value=100, value=0)
+    PhysicalHealth = st.slider('Physical Health:', min_value=0, max_value=30, value=0)
 
     # MentalHealth = st.text_input("Mental Health", "Type Here")
-    MentalHealth = st.slider('Mental Health:', min_value=0, max_value=100, value=0)
+    MentalHealth = st.slider('Mental Health:', min_value=0, max_value=30, value=0)
 
     DiffWalking = st.radio("Difficulty Walking", ("Yes", "No"))
     Sex = st.radio("Sex", ("Male", "Female"))
     # Age = st.text_input("Age", "Type Here")
-    Age = st.slider('Age:', min_value=1, max_value=80, value=54)
+    Age = st.slider('Age:', min_value=15, max_value=80, value=54)
 
     Diabetic = st.radio("Diabetic", ("Yes", "No"))
     PhysicalActivity = st.radio("Physical Activity", ("Yes", "No"))
