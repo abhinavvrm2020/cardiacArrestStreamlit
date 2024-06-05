@@ -7,8 +7,6 @@ import joblib
 
 # Load the XGBoost model
 classifier1 = joblib.load('xgb_regressor.pkl')
-# classifier2 = joblib.load('random_forest_regressor.pkl')
-classifier3 = keras.models.load_model("trained_model.h5")
 
 def draw_donut_chart(data, title):
     if(data<0):
@@ -56,11 +54,7 @@ def predict_cardiac_arrest(BMI, Smoking, AlcoholDrinking, Stroke, PhysicalHealth
 
     # Make prediction
     prediction1 = classifier1.predict(features_arr_float)
-    # prediction2 = classifier2.predict(features_arr_object)
-    prediction3 = classifier3.predict(features_arr_float)[0]
-    print(prediction1)
-    print(prediction3)
-    return (prediction1  + prediction3)/2
+    return prediction1;
 
 def main():
     st.title("Cardiac Arrest Prediction")
